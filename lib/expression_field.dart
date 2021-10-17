@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
-import 'package:keybd/keybd.dart';
+
+import 'keybd.dart';
 
 class ExpressionField extends StatefulWidget {
   const ExpressionField({
@@ -106,6 +107,7 @@ class ExpressionFormField extends FormField<String> {
     InputDecoration decoration = const InputDecoration(),
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onFieldSubmitted,
+    FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,
     AutovalidateMode? autovalidateMode = AutovalidateMode.disabled,
   }) : super(
@@ -116,13 +118,15 @@ class ExpressionFormField extends FormField<String> {
                 return "Wrong math expression";
               }
               try {
-                value.interpret();
-                return validator?.call(value);
+                final v = value.interpret();
+                return validator?.call(v.toString());
               } catch (e) {
-                  return "Wrong math expression";
+                return "Wrong math expression";
               }
             },
             autovalidateMode: autovalidateMode,
+            onSaved: (String? value) =>
+                onSaved?.call(value?.interpret().toString()),
             builder: (FormFieldState<String> field) {
               final state = field as _ExpressionFormFieldState;
               void onChangedHandler(String value) {
