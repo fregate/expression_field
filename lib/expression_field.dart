@@ -6,6 +6,7 @@ import 'keybd.dart';
 class ExpressionField extends StatefulWidget {
   const ExpressionField({
     Key? key,
+    this.focusNode,
     this.decoration,
     required this.controller,
     this.onChanged,
@@ -16,6 +17,7 @@ class ExpressionField extends StatefulWidget {
   final TextEditingController? controller;
   final void Function(String value)? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final FocusNode? focusNode;
 
   @override
   _ExpressionFieldState createState() => _ExpressionFieldState();
@@ -83,6 +85,7 @@ class _ExpressionFieldState extends State<ExpressionField>
     return Focus(
       onFocusChange: (primary) => _handleFocusChanged(context, open: primary),
       child: TextFormField(
+        focusNode: widget.focusNode,
         controller: _controller,
         showCursor: true,
         readOnly: true,
@@ -104,6 +107,7 @@ class ExpressionFormField extends FormField<String> {
   ExpressionFormField({
     Key? key,
     this.controller,
+    FocusNode? focusNode,
     InputDecoration decoration = const InputDecoration(),
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onFieldSubmitted,
@@ -138,6 +142,7 @@ class ExpressionFormField extends FormField<String> {
 
               return ExpressionField(
                 controller: state._controller,
+                focusNode: focusNode,
                 decoration: decoration.copyWith(errorText: field.errorText),
                 onChanged: onChangedHandler,
               );
