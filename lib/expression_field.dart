@@ -11,6 +11,9 @@ class ExpressionField extends StatefulWidget {
     required this.controller,
     this.onChanged,
     this.onSubmitted,
+    this.enabled,
+    this.style,
+    this.autofocus = false,
   }) : super(key: key);
 
   final InputDecoration? decoration;
@@ -18,6 +21,9 @@ class ExpressionField extends StatefulWidget {
   final void Function(String value)? onChanged;
   final ValueChanged<String>? onSubmitted;
   final FocusNode? focusNode;
+  final bool? enabled;
+  final TextStyle? style;
+  final bool autofocus;
 
   @override
   _ExpressionFieldState createState() => _ExpressionFieldState();
@@ -50,7 +56,6 @@ class _ExpressionFieldState extends State<ExpressionField>
 
   void _closeKeyboard() {
     _keyboardSlideController.reverse();
-    // _overlayEntry?.remove();
   }
 
   void _openKeyboard(BuildContext context) {
@@ -85,11 +90,14 @@ class _ExpressionFieldState extends State<ExpressionField>
     return Focus(
       onFocusChange: (primary) => _handleFocusChanged(context, open: primary),
       child: TextFormField(
+        enabled: widget.enabled,
+        style: widget.style,
         focusNode: widget.focusNode,
         controller: _controller,
         showCursor: true,
         readOnly: true,
         decoration: widget.decoration,
+        autofocus: widget.autofocus,
       ),
     );
   }
@@ -98,7 +106,6 @@ class _ExpressionFieldState extends State<ExpressionField>
   void dispose() {
     _overlayEntry?.remove();
     _keyboardSlideController.dispose();
-    _controller.dispose();
     super.dispose();
   }
 }
@@ -114,6 +121,9 @@ class ExpressionFormField extends FormField<String> {
     FormFieldSetter<String>? onSaved,
     FormFieldValidator<String>? validator,
     AutovalidateMode? autovalidateMode = AutovalidateMode.disabled,
+    bool? enabled,
+    TextStyle? style,
+    bool autofocus = false,
   }) : super(
             key: key,
             initialValue: controller != null ? controller.text : '',
@@ -141,6 +151,9 @@ class ExpressionFormField extends FormField<String> {
               }
 
               return ExpressionField(
+                autofocus: autofocus,
+                enabled: enabled,
+                style: style,
                 controller: state._controller,
                 focusNode: focusNode,
                 decoration: decoration.copyWith(errorText: field.errorText),

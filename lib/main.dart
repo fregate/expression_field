@@ -65,6 +65,7 @@ class MyHomePage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ExpressionFormField(
                 controller: _controller,
+                style: const TextStyle(fontSize: 36),
                 decoration: InputDecoration(
                   labelText: "Expression Keyboard",
                   border: OutlineInputBorder(
