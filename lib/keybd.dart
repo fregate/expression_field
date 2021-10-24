@@ -11,12 +11,8 @@ class _KeyboardOutliner extends CustomPainter {
 
   final Color color;
 
-  const _KeyboardOutliner(this.color,
-      this.functionalRowHeight,
-      this.functionalRowCount,
-      this.numbersRowHeight,
-      this.numbersInRowCount,
-      this.numbersRowsCount);
+  const _KeyboardOutliner(this.color, this.functionalRowHeight, this.functionalRowCount, this.numbersRowHeight,
+      this.numbersInRowCount, this.numbersRowsCount);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -26,25 +22,19 @@ class _KeyboardOutliner extends CustomPainter {
 
     // draw functional row dividers
     for (var idx = 1; idx < functionalRowCount; idx++) {
-      canvas.drawLine(
-          Offset(size.width / functionalRowCount * idx, 0),
-          Offset(size.width / functionalRowCount * idx, functionalRowHeight),
-          paint);
+      canvas.drawLine(Offset(size.width / functionalRowCount * idx, 0),
+          Offset(size.width / functionalRowCount * idx, functionalRowHeight), paint);
     }
 
     // draw numbers dividers
     for (var idx = 1; idx < numbersInRowCount; idx++) {
-      canvas.drawLine(
-          Offset(size.width / numbersInRowCount * idx, functionalRowHeight),
-          Offset(size.width / numbersInRowCount * idx, size.height),
-          paint);
+      canvas.drawLine(Offset(size.width / numbersInRowCount * idx, functionalRowHeight),
+          Offset(size.width / numbersInRowCount * idx, size.height), paint);
     }
 
     for (var idx = 1; idx < numbersRowsCount; idx++) {
-      canvas.drawLine(
-          Offset(0, functionalRowHeight + numbersRowHeight * idx),
-          Offset(size.width, functionalRowHeight + numbersRowHeight * idx),
-          paint);
+      canvas.drawLine(Offset(0, functionalRowHeight + numbersRowHeight * idx),
+          Offset(size.width, functionalRowHeight + numbersRowHeight * idx), paint);
     }
   }
 
@@ -55,19 +45,15 @@ class _KeyboardOutliner extends CustomPainter {
 }
 
 class ExpressionKeyboard extends StatelessWidget {
-  const ExpressionKeyboard({
-    Key? key,
-    required this.controller,
-    this.slideAnimation,
-    this.onDismiss,
-  }) : super(key: key);
+  const ExpressionKeyboard({Key? key, required this.controller, this.slideAnimation, this.onDismiss})
+      : super(key: key);
 
   final TextEditingController controller;
   final Animation<double>? slideAnimation;
 
-  final double _functionalRowHeight = 32;
+  final double _functionalRowHeight = 48;
   final double _functionalRowCount = 5;
-  final double _numbersRowHeight = 64;
+  final double _numbersRowHeight = 72;
   final double _numbersInRowCount = 3;
   final double _numbersRowsCount = 4;
 
@@ -132,6 +118,10 @@ class ExpressionKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final numericTextStyle =
+        TextStyle(fontSize: _numbersRowHeight / 2, color: Theme.of(context).colorScheme.onSurface);
+    var functionsTextStyle = TextStyle(fontSize: _functionalRowHeight * 0.7, fontWeight: FontWeight.bold);
+
     return Stack(
       children: [
         Positioned(
@@ -145,20 +135,14 @@ class ExpressionKeyboard extends StatelessWidget {
               child: SafeArea(
                 top: false,
                 child: SizedBox(
-                  height: _functionalRowHeight +
-                      _numbersRowsCount * _numbersRowHeight,
+                  height: _functionalRowHeight + _numbersRowsCount * _numbersRowHeight,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       CustomPaint(
                         // size: const Size(200, 200),
-                        painter: _KeyboardOutliner(
-                            const Color(0x0F000000),
-                            _functionalRowHeight,
-                            _functionalRowCount,
-                            _numbersRowHeight,
-                            _numbersInRowCount,
-                            _numbersRowsCount),
+                        painter: _KeyboardOutliner(const Color(0x0F000000), _functionalRowHeight,
+                            _functionalRowCount, _numbersRowHeight, _numbersInRowCount, _numbersRowsCount),
                       ),
                       Column(
                         children: [
@@ -167,26 +151,33 @@ class ExpressionKeyboard extends StatelessWidget {
                             child: Container(
                               color: Colors.black12,
                               child: Row(
-                                // direction: Axis.horizontal,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   TextButton(
                                       onPressed: () => _handleButtonPress("+"),
-                                      child: const Text('＋')),
+                                      child: Text(
+                                        '+',
+                                        style: functionsTextStyle,
+                                      )),
                                   TextButton(
                                       onPressed: () => _handleButtonPress("-"),
-                                      child: const Text('－')),
+                                      child: Text(
+                                        '-',
+                                        style: functionsTextStyle,
+                                      )),
                                   TextButton(
                                       onPressed: () => _handleButtonPress("*"),
-                                      child: const Text('×')),
+                                      child: Text(
+                                        '×',
+                                        style: functionsTextStyle,
+                                      )),
                                   TextButton(
                                       onPressed: () => _handleButtonPress("/"),
-                                      child: const Text('÷')),
+                                      child: Text('÷', style: functionsTextStyle)),
                                   TextButton(
                                       onPressed: () => _handleDismissKeyboard(),
-                                      child: const Icon(
-                                          Icons.keyboard_arrow_down)),
+                                      child: const Icon(Icons.keyboard_arrow_down)),
                                 ],
                               ),
                             ),
@@ -194,26 +185,34 @@ class ExpressionKeyboard extends StatelessWidget {
                           SizedBox(
                             height: _numbersRowHeight,
                             child: Row(
-                              // direction: Axis.horizontal,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () => _handleButtonPress("1"),
-                                    child: const Text('1'),
+                                    child: Text(
+                                      '1',
+                                      style: numericTextStyle,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () => _handleButtonPress("2"),
-                                    child: const Text('2'),
+                                    child: Text(
+                                      '2',
+                                      style: numericTextStyle,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () => _handleButtonPress("3"),
-                                    child: const Text('3'),
+                                    child: Text(
+                                      '3',
+                                      style: numericTextStyle,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -222,70 +221,83 @@ class ExpressionKeyboard extends StatelessWidget {
                           SizedBox(
                             height: _numbersRowHeight,
                             child: Row(
-                              // direction: Axis.horizontal,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("4"),
-                                        child: const Text('4'))),
+                                        onPressed: () => _handleButtonPress("4"),
+                                        child: Text(
+                                          '4',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("5"),
-                                        child: const Text('5'))),
+                                        onPressed: () => _handleButtonPress("5"),
+                                        child: Text(
+                                          '5',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("6"),
-                                        child: const Text('6'))),
+                                        onPressed: () => _handleButtonPress("6"),
+                                        child: Text(
+                                          '6',
+                                          style: numericTextStyle,
+                                        ))),
                               ],
                             ),
                           ),
                           SizedBox(
                             height: _numbersRowHeight,
                             child: Row(
-                              // direction: Axis.horizontal,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("7"),
-                                        child: const Text('7'))),
+                                        onPressed: () => _handleButtonPress("7"),
+                                        child: Text(
+                                          '7',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("8"),
-                                        child: const Text('8'))),
+                                        onPressed: () => _handleButtonPress("8"),
+                                        child: Text(
+                                          '8',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("9"),
-                                        child: const Text('9'))),
+                                        onPressed: () => _handleButtonPress("9"),
+                                        child: Text(
+                                          '9',
+                                          style: numericTextStyle,
+                                        ))),
                               ],
                             ),
                           ),
                           SizedBox(
                             height: _numbersRowHeight,
                             child: Row(
-                              // direction: Axis.horizontal,
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("."),
-                                        child: const Text(','))),
+                                        onPressed: () => _handleButtonPress("."),
+                                        child: Text(
+                                          ',',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
-                                        onPressed: () =>
-                                            _handleButtonPress("0"),
-                                        child: const Text('0'))),
+                                        onPressed: () => _handleButtonPress("0"),
+                                        child: Text(
+                                          '0',
+                                          style: numericTextStyle,
+                                        ))),
                                 Expanded(
                                     child: TextButton(
                                         onPressed: () => _handleBackspace(),
